@@ -13,11 +13,12 @@ def gradient(x, y):
 
 if __name__ == "__main__":
     # Initialize random point
-    x_0 = np.random.randint(-10, -10)
-    y_0 = np.random.randint(-10, -10)
+    x_0 = np.random.randint(-10, 10)
+    y_0 = np.random.randint(-10, 10)
 
     for n in range(50):
-        print("Iteration {}: {}".format(n), f(x_0, y_0))
+        print("Iteration {}: {}".format(n, f(x_0, y_0)))
+        print("\tx: {}, y: {}".format(x_0, y_0))
 
         # Take step in direction of gradient
         # YOUR CODE HERE
