@@ -25,13 +25,11 @@ def load_data(one_hot=True, reshape=None, validation_size=10000):
     return x_tr, y_tr, x_te, y_te
 
 def load_images(filename):
-    maybe_download(filename)
     with gzip.open(filename, 'rb') as f:
         data = np.frombuffer(f.read(), np.uint8, offset=16)
     return data.reshape(-1, 28 * 28) / np.float32(256)
 
 def load_labels(filename):
-    maybe_download(filename)
     with gzip.open(filename, 'rb') as f:
         data = np.frombuffer(f.read(), np.uint8, offset=8)
     return data
