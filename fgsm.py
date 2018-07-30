@@ -50,8 +50,11 @@ def gradients(W, b, X, Y):
             db[c] += db_nc
     return {"dW":dW, "db":db}
 
-def adversarial_examples(W, b, X, Y):
-    """ Compute adversarial examples using FGSM """
+def adversarial_gradient(W, b, X, Y):
+    """
+    Compute gradient of loss w.r.t. X for creating adversarial examples using 
+    FGSM
+    """
     forward_prop = forward(W, b, X)
     other = np.exp(np.dot(X, W.T) + b)
     dX = np.zeros((BATCH_SIZE, INPUT_DIM))
