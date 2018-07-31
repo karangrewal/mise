@@ -13,17 +13,17 @@ def generate_false_labels(Y):
     """
     Y: shape (num examples, 10)
     """
-    # YOUR CODE HERE
-    # You need to return a matrix with the same dimensions as Y
-
+    Y_false = np.random.zeros((Y.shape[0], Y.shape[1]))
+    for i in range(Y.shape[0]):
+        Y_false[i, np.random.randint(0, Y.shape[1])] = 1.
+    return Y_false
+    
 
 def get_batch(full_X, full_Y):
     """
     Return a random batch from full_X, full_Y
     """
-    # YOUR CODE HERE
-    # HINT: use np.random.randint to select random indices
-
+    indices = np.random.randint(0, len(full_X), BATCH_SIZE)
     X = full_X[indices,:]
     Y = full_Y[indices,:]
     return X, Y
@@ -34,8 +34,7 @@ def evaluate(Y, Y_hat):
     Y: shape (num examples,)
     Y_hat: shape (num examples,)
     """
-    # YOUR CODE HERE
-    # You need to return a float that represents a percentage value
+    return 100. * np.sum((Y == Y_hat))
 
 
 if __name__ == "__main__":
@@ -47,39 +46,42 @@ if __name__ == "__main__":
     train_X, train_Y, test_X, test_Y = load_data()
 
     # Generate a random batch on *test data*
-    # YOUR CODE HERE
-
+    X, Y = get_batch(test_X, test_Y)
 
     # Perform adversarial attacks; for each of these, you should also keep 
     # score of the classifier's accuracy during each type of attack to compare
     # afterwards
 
+    # First compute gradients
+    grad = gradients(W, b, X, Y)
+
     # 0. original example (not an attack!)
-    # YOUR CODE HERE
-
-
-    print("[original]\tAccuracy: you need to modify this print statement")
+    Y_hat_original = np.argmax(forward(W, b, X), axis=1)
+    score = evaluate(Y, Y_hat_original)
+    print("[original]\tAccuracy: {}%".format(score))
 
     # 1. fast-gradient sign method (FGSM)
-    # YOUR CODE HERE
-
-
-    print("[FGSM]\tAccuracy: you need to modify this print statement")
+    X_fgsm = fgsm(X, grad["dX"], EPSILON)
+    Y_hat_fgsm = np.argmax(forward(W, b, X_fgsm), axis=1)
+    score = evaluate(Y, Y_hat_fgsm)
+    print("[FGSM]\tAccuracy: {}%".format(score))
 
     # 2. targeted fast-gradient sign method (T-FGSM)
-    # YOUR CODE HERE
-
-
-    print("[T-FGSM]\tAccuracy: you need to modify this print statement")
+    Y_false = generate_false_labels(Y)
+    X_tfgsm = targeted_fgsm(X, grad["dX"], EPSILON)
+    Y_hat_tfgsm = np.argmax(forward(W, b, X_tfgsm), axis=1)
+    score = evaluate(Y, Y_hat_tfgsm)
+    print("[T-FGSM]\tAccuracy: {}%".format(score))
 
     # 3. iterative fast-gradient sign method (I-FGSM)
-    # YOUR CODE HERE
-
-
-    print("[I-FGSM]\tAccuracy: you need to modify this print statement")
+    X_ifgsm = iterative_fgsm(X, grad["dX"], 10, EPSILON)[10]
+    Y_hat_ifgsm = np.argmax(forward(W, b, X_ifgsm), axis=1)
+    score = evaluate(Y, Y_hat_ifgsm)
+    print("[T-FGSM]\tAccuracy: {}%".format(score))
 
     # 4. random noise
-    # YOUR CODE HERE
+    X_noise = random_noise(X, EPSILON)
+    Y_hat_noise = np.argmax(forward(W, b, X_ifgsm), axis=1)
+    score = evaluate(Y, Y_hat_noise)
+    print("[T-FGSM]\tAccuracy: {}%".format(score))
 
-
-    print("[noise]\tAccuracy: you need to modify this print statement")
