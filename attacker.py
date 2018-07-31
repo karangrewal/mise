@@ -5,7 +5,7 @@ import numpy as np
 
 from attacks import fgsm, targeted_fgsm, iterative_fgsm, random_noise
 from mnist import load_data
-from project import forward, loss, gradients
+from project import forward, loss, gradients, get_batch, evaluate
 from project import BATCH_SIZE, EPSILON, INPUT_DIM, NUM_CLASSES, NUM_ITERATIONS
 
 
@@ -17,24 +17,6 @@ def generate_false_labels(Y):
     for i in range(Y.shape[0]):
         Y_false[i, np.random.randint(0, Y.shape[1])] = 1.
     return Y_false
-    
-
-def get_batch(full_X, full_Y):
-    """
-    Return a random batch from full_X, full_Y
-    """
-    indices = np.random.randint(0, len(full_X), BATCH_SIZE)
-    X = full_X[indices,:]
-    Y = full_Y[indices,:]
-    return X, Y
-
-
-def evaluate(Y, Y_hat):
-    """
-    Y: shape (num examples,)
-    Y_hat: shape (num examples,)
-    """
-    return 100. * np.sum((Y == Y_hat))
 
 
 if __name__ == "__main__":
