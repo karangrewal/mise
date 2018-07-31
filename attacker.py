@@ -17,6 +17,18 @@ def generate_false_labels(Y):
     # You need to return a matrix with the same dimensions as Y
 
 
+def get_batch(full_X, full_Y):
+    """
+    Return a random batch from full_X, full_Y
+    """
+    # YOUR CODE HERE
+    # HINT: use np.random.randint to select random indices
+
+    X = full_X[indices,:]
+    Y = full_Y[indices,:]
+    return X, Y
+
+
 def evaluate(Y, Y_hat):
     """
     Y: shape (num examples,)
@@ -34,6 +46,10 @@ if __name__ == "__main__":
     # Load data
     train_X, train_Y, test_X, test_Y = load_data()
 
+    # Generate a random batch on *test data*
+    # YOUR CODE HERE
+
+
     # Perform adversarial attacks; for each of these, you should also keep 
     # score of the classifier's accuracy during each type of attack to compare
     # afterwards
@@ -42,28 +58,28 @@ if __name__ == "__main__":
     # YOUR CODE HERE
 
 
-    print("[original]\tAccuracy:")
+    print("[original]\tAccuracy: you need to modify this print statement")
 
     # 1. fast-gradient sign method (FGSM)
     # YOUR CODE HERE
 
 
-    print("[FGSM]\tAccuracy:")
+    print("[FGSM]\tAccuracy: you need to modify this print statement")
 
     # 2. targeted fast-gradient sign method (T-FGSM)
     # YOUR CODE HERE
 
 
-    print("[T-FGSM]\tAccuracy:")
+    print("[T-FGSM]\tAccuracy: you need to modify this print statement")
 
     # 3. iterative fast-gradient sign method (I-FGSM)
     # YOUR CODE HERE
 
 
-    print("[I-FGSM]\tAccuracy:")
+    print("[I-FGSM]\tAccuracy: you need to modify this print statement")
 
     # 4. random noise
     # YOUR CODE HERE
 
 
-    print("[noise]\tAccuracy:")
+    print("[noise]\tAccuracy: you need to modify this print statement")
