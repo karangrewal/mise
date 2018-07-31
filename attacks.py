@@ -12,9 +12,8 @@ def fgsm(X, dX, step_size=0.07):
     dX: gradient of the loss function with respect to X
     step_size: the step size
     """
-    # YOUR CODE HERE
-    # You should return the batch of adversarial examples
-
+    return X + step_size * dX
+    
 
 def targeted_fgsm(X, dX, step_size=0.07):
     """
@@ -22,8 +21,7 @@ def targeted_fgsm(X, dX, step_size=0.07):
     dX: gradient of the *wrong* loss function with respect to X
     step_size: the step size
     """
-    # YOUR CODE HERE
-    # You should return the batch of adversarial examples
+    return X + step_size * dX
 
 
 def iterative_fgsm(X, dX, T=10, step_size=0.07):
@@ -33,20 +31,20 @@ def iterative_fgsm(X, dX, T=10, step_size=0.07):
     T: number of steps
     step_size: the step size
     """
-    # YOUR CODE HERE
-    # You should return the batch of adversarial examples
-    # HINT: you need to use a loop ;)
+    examples = list()
+    X_current = X
+    for t in range(T):
+        X_current = X_current + (step_size / T) * dX
+        examples.append(X_current)
+    return examples
 
 
-############################## WHITE BOX ATTACKS ##############################
+############################## BLACK BOX ATTACKS ##############################
 
 def random_noise(X, step_size=0.07):
     """
     X: the original batch of data
     step_size: the step size
     """
-    # YOUR CODE HERE
-    # You should return the batch of adversarial examples
-    # HINT: use np.random.randn
+    return X + step_size * np.randn(X.shape[0], X.shape[1])
 
-    
