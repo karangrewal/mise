@@ -43,7 +43,7 @@ if __name__ == "__main__":
     print(Y_hat_original)
 
     # 1. fast-gradient sign method (FGSM)
-    X_fgsm = fgsm(X, grad["dX"], EPSILON)
+    X_fgsm = fgsm(X, grad["dX"], 2*EPSILON)
     Y_hat_fgsm = np.argmax(forward(W, b, X_fgsm), axis=1)
     score = evaluate(Y, Y_hat_fgsm)
     print("[  FGSM]\tAccuracy {}%".format(score))
@@ -51,23 +51,23 @@ if __name__ == "__main__":
 
     # 2. targeted fast-gradient sign method (T-FGSM)
     Y_false = generate_false_labels(Y)
-    X_tfgsm = targeted_fgsm(X, grad["dX"], EPSILON)
+    X_tfgsm = targeted_fgsm(X, grad["dX"], 2*EPSILON)
     Y_hat_tfgsm = np.argmax(forward(W, b, X_tfgsm), axis=1)
     score = evaluate(Y, Y_hat_tfgsm)
     print("[T-FGSM]\tAccuracy {}%".format(score))
     print(Y_hat_tfgsm)
 
     # 3. iterative fast-gradient sign method (I-FGSM)
-    X_ifgsm = iterative_fgsm(X, grad["dX"], 10, EPSILON)[-1]
+    X_ifgsm = iterative_fgsm(X, grad["dX"], 10, 2*EPSILON)[-1]
     Y_hat_ifgsm = np.argmax(forward(W, b, X_ifgsm), axis=1)
     score = evaluate(Y, Y_hat_ifgsm)
-    print("[T-FGSM]\tAccuracy {}%".format(score))
+    print("[I-FGSM]\tAccuracy {}%".format(score))
     print(Y_hat_ifgsm)
 
     # 4. random noise
-    X_noise = random_noise(X, EPSILON)
+    X_noise = random_noise(X, 2*EPSILON)
     Y_hat_noise = np.argmax(forward(W, b, X_ifgsm), axis=1)
     score = evaluate(Y, Y_hat_noise)
-    print("[T-FGSM]\tAccuracy {}%".format(score))
+    print("[ noise]\tAccuracy {}%".format(score))
     print(Y_hat_noise)
 
