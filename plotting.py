@@ -15,5 +15,6 @@ def plot_image(x):
     """
     x: Array with dimensions (28,28)
     """
-    # YOUR CODE HERE
-    # HINT: you don't need to return anything
+    plt.cla()
+    img_plot = plt.imshow(x)
+    plt.show()

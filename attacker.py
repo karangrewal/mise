@@ -13,10 +13,7 @@ def generate_false_labels(Y):
     """
     Y: shape (num examples, 10)
     """
-    Y_false = np.random.zeros((Y.shape[0], Y.shape[1]))
-    for i in range(Y.shape[0]):
-        Y_false[i, np.random.randint(0, Y.shape[1])] = 1.
-    return Y_false
+    return np.random.randint(0, NUM_CLASSES, Y.shape[0])
 
 
 if __name__ == "__main__":
@@ -37,33 +34,40 @@ if __name__ == "__main__":
     # First compute gradients
     grad = gradients(W, b, X, Y)
 
+    Y = np.argmax(Y, axis=1)
+
     # 0. original example (not an attack!)
     Y_hat_original = np.argmax(forward(W, b, X), axis=1)
     score = evaluate(Y, Y_hat_original)
-    print("[original]\tAccuracy: {}%".format(score))
+    print("[original]\tAccuracy {}%".format(score))
+    print(Y_hat_original)
 
     # 1. fast-gradient sign method (FGSM)
     X_fgsm = fgsm(X, grad["dX"], EPSILON)
     Y_hat_fgsm = np.argmax(forward(W, b, X_fgsm), axis=1)
     score = evaluate(Y, Y_hat_fgsm)
-    print("[FGSM]\tAccuracy: {}%".format(score))
+    print("[  FGSM]\tAccuracy {}%".format(score))
+    print(Y_hat_fgsm)
 
     # 2. targeted fast-gradient sign method (T-FGSM)
     Y_false = generate_false_labels(Y)
     X_tfgsm = targeted_fgsm(X, grad["dX"], EPSILON)
     Y_hat_tfgsm = np.argmax(forward(W, b, X_tfgsm), axis=1)
     score = evaluate(Y, Y_hat_tfgsm)
-    print("[T-FGSM]\tAccuracy: {}%".format(score))
+    print("[T-FGSM]\tAccuracy {}%".format(score))
+    print(Y_hat_tfgsm)
 
     # 3. iterative fast-gradient sign method (I-FGSM)
-    X_ifgsm = iterative_fgsm(X, grad["dX"], 10, EPSILON)[10]
+    X_ifgsm = iterative_fgsm(X, grad["dX"], 10, EPSILON)[-1]
     Y_hat_ifgsm = np.argmax(forward(W, b, X_ifgsm), axis=1)
     score = evaluate(Y, Y_hat_ifgsm)
-    print("[T-FGSM]\tAccuracy: {}%".format(score))
+    print("[T-FGSM]\tAccuracy {}%".format(score))
+    print(Y_hat_ifgsm)
 
     # 4. random noise
     X_noise = random_noise(X, EPSILON)
     Y_hat_noise = np.argmax(forward(W, b, X_ifgsm), axis=1)
     score = evaluate(Y, Y_hat_noise)
-    print("[T-FGSM]\tAccuracy: {}%".format(score))
+    print("[T-FGSM]\tAccuracy {}%".format(score))
+    print(Y_hat_noise)
 

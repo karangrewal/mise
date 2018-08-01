@@ -46,5 +46,5 @@ def random_noise(X, step_size=0.07):
     X: the original batch of data
     step_size: the step size
     """
-    return X + step_size * np.randn(X.shape[0], X.shape[1])
+    return X + step_size * np.random.randn(X.shape[0], X.shape[1])
 
