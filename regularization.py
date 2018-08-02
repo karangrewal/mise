@@ -7,8 +7,8 @@ from mnist import load_data
 from project import forward, get_batch, evaluate
 from project import BATCH_SIZE, INPUT_DIM, NUM_CLASSES
 
-# Select type of regularization
-L2_REGULARZATION = True
+ALPHA = 1. # Regularization parameter
+L2_REGULARIZATION = True
 L1_REGULARIZATION = False
 
 # Global variables
@@ -25,7 +25,7 @@ def loss(W, b, X, Y):
     loss = -1. * loss
     for d in range(INPUT_DIM):
         for c in range(NUM_CLASSES):
-            loss += (alpha / 2.) * np.square(W[c, d]) if L2_REGULARZATION else alpha * np.abs(W[c, d])
+            loss += (ALPHA / 2.) * np.square(W[c, d]) if L2_REGULARIZATION else ALPHA * np.abs(W[c, d])
     return loss
 
 
@@ -48,7 +48,7 @@ def gradients(W, b, X, Y):
                 dX_ncd = forward_prop[n, c] * (W[c, d] - np.sum(other * W[:, d], axis=1)[n] / np.sum(other, axis=1)[n])
                 dX_ncd = dX_ncd * -1. * Y[n, c] / forward_prop[n, c]
                 dX[n, d] += dX_ncd
-                dX[n, d] += 2 * alpha * W[c, d] if L2_REGULARIZATION else alpha * np.sign(W[c, d])
+                dX[n, d] += 2 * ALPHA * W[c, d] if L2_REGULARIZATION else ALPHA * np.sign(W[c, d])
             db_nc = -1. * Y[n, c] / forward_prop[n, c]
             db_nc = db_nc * forward_prop[n, c] * (1. - forward_prop[n, c])
             db[c] += db_nc
@@ -56,8 +56,8 @@ def gradients(W, b, X, Y):
 
 
 if __name__ == "__main__":
-    assert L2_REGULARZATION != L1_REGULARIZATION
-    if L2_REGULARZATION:
+    assert L2_REGULARIZATION != L1_REGULARIZATION
+    if L2_REGULARIZATION:
         print("MNIST classifier with L2 reg.")
     else:
         print("MNIST classifier with L1 reg.")
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         if not os.path.isdir("./params/"):
             os.mkdir("./params/")
 
-        if L2_REGULARZATION:
+        if L2_REGULARIZATION:
             np.save("./params/W_L2.npy", W)
             np.save("./params/b_L2.npy", b)
         else:
